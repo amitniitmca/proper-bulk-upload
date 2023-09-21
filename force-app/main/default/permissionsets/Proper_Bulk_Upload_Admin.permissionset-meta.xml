@@ -30,4 +30,8 @@
         <object>Proper_Object_Mapping__c</object>
         <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
+    <tabSettings>
+        <tab>Object_Mapping</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
 </PermissionSet>
