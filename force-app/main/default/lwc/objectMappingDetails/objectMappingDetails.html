@@ -2,7 +2,7 @@
 <!--
   @description       : 
   @author            : Amit Kumar (Proper Salesforce Tutorials)
-  @last modified on  : 28-09-2023
+  @last modified on  : 29-09-2023
   @last modified by  : Amit Kumar (Proper Salesforce Tutorials)
 -->
 <template>
@@ -55,14 +55,15 @@
                     </lightning-layout>           
                 </lightning-layout-item>
                 <lightning-layout-item size="12">
-                    <div style="height:150px">
+                    <div style="height:200px">
                         <lightning-datatable
                             key-field="id"
                             data={recordsToShow}
-                            show-row-number-column
+                            columns={columnsList}
                             row-number-offset={rowOffset}
+                            show-row-number-column
                             hide-checkbox-column
-                            columns={columnsList}>
+                            onrowaction={handleRowAction}>
                         </lightning-datatable>
                     </div>
                 </lightning-layout-item>

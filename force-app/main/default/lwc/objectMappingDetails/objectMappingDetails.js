@@ -1,8 +1,17 @@
+/**
+ * @description       : 
+ * @author            : Amit Kumar (Proper Salesforce Tutorials)
+ * @last modified on  : 29-09-2023
+ * @last modified by  : Amit Kumar (Proper Salesforce Tutorials)
+**/
 import { LightningElement, wire, track, api } from 'lwc';
 import { refreshApex } from '@salesforce/apex';
 import {ShowToastEvent} from 'lightning/platformShowToastEvent';
+import ConfirmationModal from 'c/confirmationModal';
+import ObjectMapEditModal from 'c/objectMapEditModal';
 import getStoredDetails from '@salesforce/apex/ObjectMappingDetailsController.getStoredDetails';
-
+import deleteRecord from '@salesforce/apex/ObjectMappingDetailsController.deleteRecord';
+import updateRecord from '@salesforce/apex/ObjectMappingDetailsController.updateRecord';
 export default class ObjectMappingDetails extends LightningElement {
 
     @track columnsList = [
@@ -13,7 +22,9 @@ export default class ObjectMappingDetails extends LightningElement {
         {label: 'Master Object Name', fieldName: 'Master_Object_Name__c'},
         {label: 'Referred Master Field Name', fieldName: 'Referred_Master_Field_Name__c'},
         {label: 'Referred Master Object Name', fieldName: 'Referred_Master_Object_Name__c'},
-        {label: 'Record Id', fieldName: 'Id'}
+        // {label: 'Record Id', fieldName: 'Id'},
+        {type: 'button', initialWidth: 70, typeAttributes: {label:'Edit', value:'Edit', variant:'base'}},
+        {type: 'button', initialWidth: 80, typeAttributes: {label:'Delete', value:'Delete', variant:'base'}}
     ];
 
     pageSize;
@@ -69,7 +80,9 @@ export default class ObjectMappingDetails extends LightningElement {
     addFilterFields(){
         this.filterFieldOptions = [];
         for(let col of this.columnsList){
-            this.filterFieldOptions.push({label: col.label, value: col.fieldName});
+            if(col.label != undefined){
+                this.filterFieldOptions.push({label: col.label, value: col.fieldName});
+            }
         }
         this.filterFieldOptions.unshift({label:'SELECT FIELD', value: '---SELECT---'});
         this.filterFieldValue = '---SELECT---';
@@ -206,6 +219,71 @@ export default class ObjectMappingDetails extends LightningElement {
         document.body.appendChild(downloadElement);
         downloadElement.click();
         this.showSuccess(this.objectValue+'.csv file downloaded successfully!');
+    }
+
+    handleRowAction(event){
+        const recId = event.detail.row.Id;
+        const actionName = event.detail.action.value;
+        if (actionName === 'Edit') {
+            this.handleEditClick(recId);
+        } else {
+            this.handleDeleteClick(recId);
+        }
+    }
+
+    async handleEditClick(recordId){
+        const record = this.getRecordOfId(recordId);
+        const res = await ObjectMapEditModal.open({
+            size: 'small',
+            title: 'Field Edit Modal',
+            destinationObjectName: record.object,
+            destinationFieldName: record.desField,
+            destinationFieldType: record.desType,
+            sourceFieldName: record.field
+        });
+        if(res != 'CANCEL'){
+            updateRecord({recId: recordId, sourceFieldName: res})
+            .then((data) => {
+                this.showSuccess('Source Field Name for '+record.desField+' field of '+record.object+' object updated successfully!');
+                this.refreshData();
+            })
+            .catch((error) => {
+                this.showError(JSON.stringify(error));
+            });
+        }
+    }
+
+    async handleDeleteClick(recordId){
+        const record = this.getRecordOfId(recordId);
+        const res = await ConfirmationModal.open({
+            size: 'small',
+            content: "Are you sure to delete '"+record.field+"' field of '"+record.object+"' object?",
+            title: 'Delete Confirmation'
+        });
+        if(res == 'YES'){
+            deleteRecord({recId : recordId})
+            .then((data) => {
+                this.showSuccess(record.field+' field of '+record.object+' object deleted successfully!');
+                this.refreshData();
+            })
+            .catch((error) => {
+                this.showError(JSON.stringify(error));
+            });
+        }
+    }
+
+    getRecordOfId(recordId){
+        let record = {};
+        for(let data of this.dataList){
+            if(data.Id == recordId){
+                record.field = data.Source_Field_Name__c;
+                record.object = data.Destination_Object_Name__c;
+                record.desField = data.Destination_Field_Name__c;
+                record.desType = data.Destination_Field_Type__c;
+                break;
+            }
+        }
+        return record;
     }
 
     showError(message){
