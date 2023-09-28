@@ -1,0 +1,49 @@
+<!--
+  @description       : 
+  @author            : Amit Kumar (Proper Salesforce Tutorials)
+  @last modified on  : 29-09-2023
+  @last modified by  : Amit Kumar (Proper Salesforce Tutorials)
+-->
+<template>
+    <lightning-modal-header label={title}></lightning-modal-header>
+    <lightning-modal-body> 
+      <lightning-layout multiple-rows>
+        <lightning-layout-item size="6" class="slds-var-p-around_medium">
+            <lightning-input 
+                type="text"
+                label="Destination Object Name"
+                value={destinationObjectName}
+                disabled="true">
+            </lightning-input>
+        </lightning-layout-item>
+        <lightning-layout-item size="6" class="slds-var-p-around_medium">
+            <lightning-input 
+                type="text"
+                label="Destination Field Name"
+                value={destinationFieldName}
+                disabled="true">
+            </lightning-input>
+        </lightning-layout-item>
+        <lightning-layout-item size="6" class="slds-var-p-around_medium">
+            <lightning-input 
+                type="text"
+                label="Destination Field Type"
+                value={destinationFieldType}
+                disabled="true">
+            </lightning-input>
+        </lightning-layout-item>
+        <lightning-layout-item size="6" class="slds-var-p-around_medium">
+            <lightning-input 
+                type="text"
+                label="Source Field Name"
+                value={sourceFieldName}
+                onchange={handleFieldNameChange}>
+            </lightning-input>
+        </lightning-layout-item>
+      </lightning-layout>
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <lightning-button label="Save" variant="brand" onclick={handleSave}></lightning-button>
+        <lightning-button label="Cancel" variant="neutral" onclick={handleCancel}></lightning-button>
+    </lightning-modal-footer>
+</template>
