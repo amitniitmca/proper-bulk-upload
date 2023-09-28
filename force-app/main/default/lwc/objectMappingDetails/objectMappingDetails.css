@@ -1,0 +1,6 @@
+.mappingDetailsDiv{
+    display : block;
+    margin:10px;
+    border-radius: 5px !important;
+    box-shadow: 1px 3px 8px rgba(0, 0, 0, 0.14) !important;
+}
