@@ -1,7 +1,7 @@
 /**
  * @description       : ObjectMappingForm LWC is used to create Proper Object Mapping Records
  * @author            : Amit Kumar (Proper Salesforce Tutorials)
- * @last modified on  : 28-09-2023
+ * @last modified on  : 29-09-2023
  * @last modified by  : Amit Kumar (Proper Salesforce Tutorials)
 **/
 import { LightningElement, wire, track} from 'lwc';
@@ -189,6 +189,7 @@ export default class ObjectMappingForm extends LightningElement {
         for(let field of this.fieldRecords){
             if(field.id == fieldId){
                 field.saved = false;
+                this.listOfSelectedFields = this.listOfSelectedFields.filter(text => text != field.destinationField);
                 field.destinationField = undefined;
                 field.sourceField = undefined;
                 field.objectName = undefined;
