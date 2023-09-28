@@ -1,0 +1,88 @@
+<!--
+  @description       : 
+  @author            : Amit Kumar (Proper Salesforce Tutorials)
+  @group             : 
+  @last modified on  : 28-09-2023
+  @last modified by  : Amit Kumar (Proper Salesforce Tutorials)
+-->
+<template>
+    <div class="slds-box slds-box_small mappingFormDiv">
+        <lightning-card title="Object Mapping Form">
+            <lightning-layout multiple-rows class="slds-var-p-left_large slds-var-p-right_large">
+                <lightning-layout-item size="12" class="slds-var-p-left_large slds-var-p-right_large slds-var-p-bottom_large">
+                    <template if:true={spinnerLoading}>
+                        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                    </template>
+                    <template if:false={spinnerLoading}>
+                        <lightning-layout multiple-rows>
+                            <lightning-layout-item size="5">
+                                <lightning-combobox
+                                    label="Choose Object for Mapping"
+                                    value={objectValue}
+                                    options={objectOptions}
+                                    onchange={handleObjectChange}>
+                                </lightning-combobox>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="2" class="slds-var-p-top_large slds-var-p-left_large">
+                                <lightning-input 
+                                    type="checkbox" 
+                                    label="Is Master"
+                                    checked={isMasterObject}
+                                    onchange={handleIsMasterChange}>
+                                </lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="5">
+                                <lightning-combobox
+                                    label="Choose Master Object"
+                                    value={masterObjectValue}
+                                    options={masterObjectOptions}
+                                    onchange={handleMasterObjectChange}
+                                    disabled={isMasterObject}>
+                                </lightning-combobox>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </template>
+                </lightning-layout-item>
+                <lightning-layout-item size="12">
+                    <template if:true={fieldRecords} for:each={fieldRecords} for:item="field">
+                        <c-field-mapping-form 
+                            key={field.id} 
+                            data-id={field.id}
+                            destination-field-options={fieldInfos}
+                            onsaved={handleFieldSaved}
+                            onreset={handleFieldReset}>
+                        </c-field-mapping-form>
+                    </template>    
+                </lightning-layout-item>
+                <lightning-layout-item size="12" class="slds-var-p-top_x-small">
+                    <lightning-button 
+                        variant="neutral" 
+                        label="Add Field"
+                        onclick={handleAddFieldClick}
+                        class="slds-var-p-left_large slds-var-p-right_small">
+                    </lightning-button>
+                    <lightning-button 
+                        variant="neutral" 
+                        label="Delete Field"
+                        onclick={handleDeleteFieldClick}
+                        class="slds-var-p-left_small">
+                    </lightning-button>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" class="slds-var-p-around_xxx-small slds-align_absolute-center">
+                    <lightning-button 
+                        variant="brand" 
+                        label="Create"
+                        onclick={handleCreateClick}
+                        class="slds-var-p-right_small">
+                    </lightning-button>
+                    <lightning-button 
+                        variant="destructive" 
+                        label="Cancel"
+                        onclick={handleCancelClick}
+                        class="slds-var-p-left_small">
+                    </lightning-button>
+                </lightning-layout-item>
+            </lightning-layout>
+        </lightning-card>
+    </div>
+</template>
