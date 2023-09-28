@@ -1,0 +1,121 @@
+<!-- sldsValidatorIgnore -->
+<!--
+  @description       : 
+  @author            : Amit Kumar (Proper Salesforce Tutorials)
+  @last modified on  : 28-09-2023
+  @last modified by  : Amit Kumar (Proper Salesforce Tutorials)
+-->
+<template>
+    <div class="slds-box slds-box_small">
+        <lightning-card title="Object Mapping Details">
+            <lightning-layout multiple-rows class="slds-var-p-left_medium slds-var-p-right_medium">
+                <lightning-layout-item size="12">
+                    <lightning-layout multiple-rows class="slds-var-p-bottom_medium slds-var-p-left_xx-large">
+                        <lightning-layout-item size="3" class="slds-var-p-left_xx-large slds-var-p-right_x-large">
+                            <lightning-combobox
+                                label="Choose Object"
+                                value={objectValue}
+                                options={objectOptions}
+                                onchange={handleObjectChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="3" class="slds-var-p-left_x-large slds-var-p-right_x-large">
+                            <lightning-combobox
+                                label="Choose Field to Filter"
+                                value={filterFieldValue}
+                                options={filterFieldOptions}
+                                onchange={handleFilterFieldChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="3" class="slds-var-p-left_x-large slds-var-p-right_x-large">
+                            <lightning-input 
+                                type="text" 
+                                label="Field Field Value" 
+                                value={fieldValue}
+                                onchange={handleFieldValueChange}>
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="3" class="slds-var-p-left_x-large slds-var-p-top_large">
+                            <lightning-button-group>
+                                <lightning-button 
+                                    label="Filter" 
+                                    onclick={handleFilterClick}>
+                                </lightning-button>
+                                <lightning-button 
+                                    label="Reset" 
+                                    onclick={handleResetClick}>
+                                </lightning-button>
+                                <lightning-button 
+                                    label="Download CSV"
+                                    disabled={isNotDownloadable} 
+                                    onclick={handleDownloadClick}>
+                                </lightning-button>
+                            </lightning-button-group>
+                        </lightning-layout-item>
+                    </lightning-layout>           
+                </lightning-layout-item>
+                <lightning-layout-item size="12">
+                    <div style="height:150px">
+                        <lightning-datatable
+                            key-field="id"
+                            data={recordsToShow}
+                            show-row-number-column
+                            row-number-offset={rowOffset}
+                            hide-checkbox-column
+                            columns={columnsList}>
+                        </lightning-datatable>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item size="12">
+                    <lightning-layout multiple-rows>
+                        <lightning-layout-item size="3" class="slds-var-p-top_medium">
+                            <lightning-combobox
+                                label="Record Size"
+                                value={pageSize}
+                                options={pageSizeOptions}
+                                onchange={handlePageSizeChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="6" class="slds-var-p-top_x-large slds-align_absolute-center">
+                            <lightning-button 
+                                variant="neutral" 
+                                label="First"
+                                icon-name="utility:jump_to_left" 
+                                disabled={isFirstPage}
+                                onclick={handleFirstClick}>
+                            </lightning-button>
+                            <lightning-button 
+                                variant="neutral" 
+                                label="Previous" 
+                                icon-name="utility:chevronleft" 
+                                disabled={isFirstPage}
+                                onclick={handlePreviousClick}>
+                            </lightning-button>
+                            <lightning-button 
+                                variant="neutral" 
+                                label="Next" 
+                                icon-name="utility:chevronright"
+                                icon-position="right" 
+                                disabled={isLastPage}
+                                onclick={handleNextClick}>
+                            </lightning-button>
+                            <lightning-button 
+                                variant="neutral" 
+                                label="Last"
+                                icon-name="utility:jump_to_right"
+                                icon-position="right"
+                                disabled={isLastPage} 
+                                onclick={handleLastClick}>
+                            </lightning-button>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="3" class="slds-var-p-top_xx-large">
+                            <p class="slds-float_right">
+                                Total Records : {totalRecords}
+                            </p>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+            </lightning-layout>
+        </lightning-card>
+    </div>
+</template>
