@@ -1,0 +1,19 @@
+<!--
+  @description       : 
+  @author            : Amit Kumar (Proper Salesforce Tutorials)
+  @group             : 
+  @last modified on  : 28-09-2023
+  @last modified by  : Amit Kumar (Proper Salesforce Tutorials)
+-->
+<template>
+    <lightning-card title="Object Mapping" icon-name="standard:data_mapping" class="mappingPage">
+        <lightning-layout multiple-rows class="slds-var-p-left_large slds-var-p-right_large">
+            <lightning-layout-item size="12">
+                <c-object-mapping-form onadded={handleOnAdded}></c-object-mapping-form>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" class="slds-var-p-top_medium">
+                <c-object-mapping-details></c-object-mapping-details>
+            </lightning-layout-item>
+        </lightning-layout>
+    </lightning-card>
+</template>
