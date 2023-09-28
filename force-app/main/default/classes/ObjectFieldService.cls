@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Amit Kumar (Proper Salesforce Tutorials)
  * @group             : 
- * @last modified on  : 27-09-2023
+ * @last modified on  : 29-09-2023
  * @last modified by  : Amit Kumar (Proper Salesforce Tutorials)
 **/
 public with sharing class ObjectFieldService {
@@ -15,7 +15,7 @@ public with sharing class ObjectFieldService {
             Schema.SObjectType sObjectType = globalDescribe.get(objectName);
             Schema.DescribeSObjectResult describeResult = sObjectType.getDescribe();
 
-            if (describeResult.isCreateable()) {
+            if (describeResult.isCreateable() && !describeResult.getLabel().containsIgnoreCase('Proper Object Mapping')) {
                 objectInfos.put(describeResult.getName(), describeResult.getLabel());
             }
         }
@@ -86,6 +86,20 @@ public with sharing class ObjectFieldService {
         return [SELECT Id, Source_Field_Name__c, Destination_Field_Name__c, Destination_Field_Type__c, 
                 Destination_Object_Name__c, Master_Object_Name__c, Referred_Master_Field_Name__c, Referred_Master_Object_Name__c
                 FROM Proper_Object_Mapping__c WITH SECURITY_ENFORCED ORDER BY CreatedDate DESC];
+    }
+
+    public static void deleteObjectMapping(String recId){
+        Proper_Object_Mapping__c objectMap = [SELECT Id FROM Proper_Object_Mapping__c 
+                                                WHERE Id = :recId
+                                                WITH SECURITY_ENFORCED];
+        DELETE objectMap;
+    }
+
+    public static void updateSourceFieldName(String recId, String newName){
+        Proper_Object_Mapping__c objectMap = new Proper_Object_Mapping__c();
+        objectMap.Id = recId;
+        objectMap.Source_Field_Name__c = newName;
+        UPDATE objectMap;
     }
     
     public class FieldInfo{
