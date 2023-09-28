@@ -1,0 +1,37 @@
+<template>
+    <lightning-layout multiple-rows class="slds-var-p-left_medium slds-box slds-theme_shade">
+        <lightning-layout-item size="5" class="slds-var-p-around_xx-small">
+            <lightning-combobox
+                label="Choose Destination Field"
+                value={destinationFieldValue}
+                options={destinationFieldOptions}
+                onchange={handleDestinationFieldChange}
+                disabled={disableDestinationField}>
+            </lightning-combobox>
+        </lightning-layout-item>
+        <lightning-layout-item size="5" class="slds-var-p-around_xx-small">
+            <lightning-input 
+                type="text" 
+                variant="standard" 
+                label="Source Field Name"
+                value={sourceFieldName}
+                onchange={handleSourceFieldChange}
+                disabled={disableSourceField}>
+            </lightning-input>
+        </lightning-layout-item>
+        <lightning-layout-item size="2" class="slds-var-p-top_large slds-var-m-top_xx-small slds-var-p-left_large">
+            <lightning-button 
+                variant="neutral" 
+                label="Save" 
+                onclick={handleSaveClick}
+                disabled={disableSave}>
+            </lightning-button>
+            <lightning-button 
+                variant="neutral" 
+                label="Reset" 
+                onclick={handleResetClick}
+                disabled={disableReset}>
+            </lightning-button>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>
