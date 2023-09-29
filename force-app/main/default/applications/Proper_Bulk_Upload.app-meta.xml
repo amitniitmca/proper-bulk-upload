@@ -13,6 +13,7 @@
     <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
     <label>Proper Bulk Upload</label>
     <navType>Standard</navType>
+    <tabs>Object_Mapping</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>Proper_Bulk_Upload_UtilityBar</utilityBar>
 </CustomApplication>
