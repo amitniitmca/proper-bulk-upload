@@ -1,7 +1,7 @@
 /**
- * @description       : ObjectMappingForm LWC is used to create Proper Object Mapping Records
+ * @description       : JS file of the Object Mapping Form LWC which is the child LWC of the Object Mapping Page LWC, i.e. to create Proper Object Mapping record.
  * @author            : Amit Kumar (Proper Salesforce Tutorials)
- * @last modified on  : 29-09-2023
+ * @last modified on  : 30-09-2023
  * @last modified by  : Amit Kumar (Proper Salesforce Tutorials)
 **/
 import { LightningElement, wire, track} from 'lwc';
@@ -30,6 +30,10 @@ export default class ObjectMappingForm extends LightningElement {
 
     listOfSelectedFields = [];
 
+    /**
+    * @description Wired service method to get all the creatable objects in the org except for the custom objects of the package.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    **/
     @wire(getAllObjects)
     wiredGetAllObjects({data, error}){
         if(data){
@@ -48,6 +52,10 @@ export default class ObjectMappingForm extends LightningElement {
         }
     }
 
+    /**
+    * @description Handler for the Object Name combo box change event.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    **/
     handleObjectChange(event){
         this.objectValue = event.detail.value;
         if(this.objectValue != '---SELECT---'){
@@ -60,6 +68,10 @@ export default class ObjectMappingForm extends LightningElement {
         }
     }
 
+    /**
+    * @description This method is used to get all creatable fields of the selected object.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    **/
     getFields(){
         getAllFieldsOfObject({objectName : this.objectValue})
         .then((data) => {
@@ -75,6 +87,10 @@ export default class ObjectMappingForm extends LightningElement {
         });
     }
 
+    /**
+    * @description This method is used to get all the stored destination field names in the records of the Proper Object Mapping object for the selected object.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    **/
     getStoredFieldNames(){
         getStoredFieldNamesOfObject({objectName : this.objectValue})
         .then((data) => {
@@ -87,10 +103,18 @@ export default class ObjectMappingForm extends LightningElement {
         });
     }
 
+    /**
+    * @description Handler for the Is Master checkbox change event.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    **/
     handleIsMasterChange(event){
         this.isMasterObject = event.detail.checked;
     }
 
+    /**
+    * @description Handler for the Master Object combo box value change event.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    **/
     handleMasterObjectChange(event){
         this.masterObjectValue = event.detail.value;
         let resetFlag = false;
@@ -115,6 +139,10 @@ export default class ObjectMappingForm extends LightningElement {
         }
     }
 
+    /**
+    * @description Handler for the Add Field button click event.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    **/
     handleAddFieldClick(){
         if(this.objectValue == '---SELECT---'){
             this.showError('Please choose object for mapping before adding field!');
@@ -131,6 +159,10 @@ export default class ObjectMappingForm extends LightningElement {
         }
     }
 
+    /**
+    * @description Handler for the Delete Field button click event.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    **/
     handleDeleteFieldClick(){
         if(this.numberOfFields != 0){
             this.numberOfFields--;
@@ -146,14 +178,26 @@ export default class ObjectMappingForm extends LightningElement {
         }
     }
 
+    /**
+    * @description This method is used to show the success toast of the specific message.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    **/
     showSuccess(message){
         this.dispatchEvent(new ShowToastEvent({title:'SUCCESS', message:message, variant:'success'}));
     }
 
+    /**
+    * @description This method is used to show the error toast of the specific message.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    **/
     showError(message){
         this.dispatchEvent(new ShowToastEvent({title:'ERROR', message:message, variant:'error'}));
     }
 
+    /**
+    * @description Handler for the Save button click event.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    **/
     handleFieldSaved(event){
         const fieldId = event.currentTarget.dataset.id;
         if(this.listOfSelectedFields.includes(event.detail.destinationField)){
@@ -184,6 +228,10 @@ export default class ObjectMappingForm extends LightningElement {
         }
     }
 
+    /**
+    * @description Handler for the Reset button click event.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    **/
     handleFieldReset(event){
         const fieldId = event.currentTarget.dataset.id;
         for(let field of this.fieldRecords){
@@ -202,6 +250,10 @@ export default class ObjectMappingForm extends LightningElement {
         }
     }
 
+    /**
+    * @description This method is used to get information of the field for the specified field API name.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    **/
     getFieldDetails(apiName){
         let record = {};
         for(let field of this.fieldDetails){
@@ -215,6 +267,10 @@ export default class ObjectMappingForm extends LightningElement {
         return record;
     }
 
+    /**
+    * @description Handler for the Create button click event.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    **/
     handleCreateClick(){
         if(this.objectValue == '---SELECT---'){
             this.showError('Please "Choose Object for Mapping" for creating Object Mapping!');
@@ -241,6 +297,10 @@ export default class ObjectMappingForm extends LightningElement {
         }
     }
 
+    /**
+    * @description Handler for the Cancel button click event.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    **/
     handleCancelClick(){
         this.fieldRecords = [];
         this.numberOfFields = 0;
@@ -251,6 +311,10 @@ export default class ObjectMappingForm extends LightningElement {
         this.masterObjectValue = '---SELECT---';
     }
 
+    /**
+    * @description This method is used to check whether all the fields added are saved or not.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    **/
     isAllFieldsSaved(){
         let saved = true;
         for(let field of this.fieldRecords){
