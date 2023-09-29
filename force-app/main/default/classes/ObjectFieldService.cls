@@ -1,12 +1,16 @@
 /**
- * @description       : 
+ * @description       : This class is used to get and store information from all objects and fields as well as Proper Object Mapping object.
  * @author            : Amit Kumar (Proper Salesforce Tutorials)
- * @group             : 
  * @last modified on  : 29-09-2023
  * @last modified by  : Amit Kumar (Proper Salesforce Tutorials)
 **/
 public with sharing class ObjectFieldService {
 
+    /**
+    * @description This method is used to get all the creatable objects in the org except for the custom objects of the package.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    * @return Map<String, String> Key(API name) and value (Label) of objects.
+    **/
     public static Map<String, String> getAllObjects(){
         Map<String, Schema.SObjectType> globalDescribe = Schema.getGlobalDescribe();
 
@@ -23,6 +27,12 @@ public with sharing class ObjectFieldService {
         return objectInfos;
     }
 
+    /**
+    * @description This method is used to get list of creatable fields of a specific object.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    * @param objectName Name of the object whose fields is to be fetched from the org.
+    * @return List<ObjectFieldService.FieldInfo> List of inner class: containing API Name, Label, Data Type, Master Object Name and API name of field in Master Object.
+    **/
     public static List<ObjectFieldService.FieldInfo> getFieldsOfObject(String objectName){
         List<ObjectFieldService.FieldInfo> creatableFields = new List<ObjectFieldService.FieldInfo>();
 
@@ -48,6 +58,11 @@ public with sharing class ObjectFieldService {
         return creatableFields;
     }
 
+    /**
+    * @description This method is used to insert records in Proper Object Mapping object.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    * @param records List of records to be inserted in the org.
+    **/
     public static void insertObjectMappingRecords(List<Map<String, String>> records){
         List<Proper_Object_Mapping__c> objectMappings = new List<Proper_Object_Mapping__c>();
         for(Map<String, String> record : records){
@@ -71,6 +86,12 @@ public with sharing class ObjectFieldService {
         INSERT objectMappings;
     }
 
+    /**
+    * @description This method is used to get Destination field names of the specified object stored in the Proper Object Mapping object.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    * @param objectName Name of the object whose Destination field names is to be fetched from the org.
+    * @return List<String> List of Destination field names of the specified object.
+    **/
     public static List<String> getStoredFieldsOfObject(String objectName){
         List<Proper_Object_Mapping__c> mappings = [SELECT Destination_Field_Name__c FROM Proper_Object_Mapping__c 
                                                     WHERE Destination_Object_Name__c = :objectName 
@@ -82,12 +103,22 @@ public with sharing class ObjectFieldService {
         return fields;
     }
 
+    /**
+    * @description This method is used to get all the stored values in the Proper Object Mapping object.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    * @return List<Proper_Object_Mapping__c> List of records of the Proper Object Mapping object.
+    **/
     public static List<Proper_Object_Mapping__c> getAllValues(){
         return [SELECT Id, Source_Field_Name__c, Destination_Field_Name__c, Destination_Field_Type__c, 
                 Destination_Object_Name__c, Master_Object_Name__c, Referred_Master_Field_Name__c, Referred_Master_Object_Name__c
                 FROM Proper_Object_Mapping__c WITH SECURITY_ENFORCED ORDER BY CreatedDate DESC];
     }
 
+    /**
+    * @description This method is used to delete a specific record in the Proper Object Mapping object.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    * @param recId Record Id of the record that is to be deleted from the org.
+    **/
     public static void deleteObjectMapping(String recId){
         Proper_Object_Mapping__c objectMap = [SELECT Id FROM Proper_Object_Mapping__c 
                                                 WHERE Id = :recId
@@ -95,6 +126,12 @@ public with sharing class ObjectFieldService {
         DELETE objectMap;
     }
 
+    /**
+    * @description This method is used to update the source field name of a specific record in the Proper Object Mapping object.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    * @param recId Record Id of the record that is to be updated in the Proper Object Mapping object.
+    * @param newName New Source Field name that is to be updated in the Proper Object Mapping object.
+    **/
     public static void updateSourceFieldName(String recId, String newName){
         Proper_Object_Mapping__c objectMap = new Proper_Object_Mapping__c();
         objectMap.Id = recId;
@@ -102,6 +139,10 @@ public with sharing class ObjectFieldService {
         UPDATE objectMap;
     }
     
+    /**
+    * @description This Inner Class is to store various information related to a field like, API Name, Label, Data Type, Master Object Name (Related Object) and API name of the field of Master Object Name.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    **/
     public class FieldInfo{
         @AuraEnabled public String fieldName;
         @AuraEnabled public String fieldLabel;
@@ -110,6 +151,12 @@ public with sharing class ObjectFieldService {
         @AuraEnabled public String masterObjectField;
     }
 
+    /**
+    * @description This private method is to get the record field's API name of a specific object in the org.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    * @param objectName Name of the object whose record field's API name is to be fetched. 
+    * @return String API name of the record field of the object.
+    **/
     private static String getRecordNameField(String objectName){
         String recordNameField;
         Schema.SObjectType sObjectType = Schema.getGlobalDescribe().get(objectName);
