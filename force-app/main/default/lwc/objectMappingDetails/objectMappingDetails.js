@@ -1,7 +1,7 @@
 /**
  * @description       : JS file for Object Mapping Details LWC which is the child LWC of the Object Mapping Page LWC, i.e. to show the data table for the Proper Object Mapping records.
  * @author            : Amit Kumar (Proper Salesforce Tutorials)
- * @last modified on  : 29-09-2023
+ * @last modified on  : 30-09-2023
  * @last modified by  : Amit Kumar (Proper Salesforce Tutorials)
 **/
 import { LightningElement, wire, track, api } from 'lwc';
@@ -229,7 +229,7 @@ export default class ObjectMappingDetails extends LightningElement {
     **/
     filterDataByObject(){
         if(this.objectValue != '---SELECT---'){
-            this.filteredDataList = this.dataList.filter((item) => item.Destination_Object_Name__c.includes(this.objectValue));
+            this.filteredDataList = this.dataList.filter((item) => item.Destination_Object_Name__c == this.objectValue || item.Master_Object_Name__c == this.objectValue);
         }
         else{
             this.filteredDataList = this.dataList;

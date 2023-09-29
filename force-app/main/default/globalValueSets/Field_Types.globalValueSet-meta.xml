@@ -1,79 +1,124 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
     <customValue>
-        <fullName>Checkbox</fullName>
+        <fullName>ADDRESS</fullName>
         <default>false</default>
-        <label>Checkbox</label>
+        <label>ADDRESS</label>
     </customValue>
     <customValue>
-        <fullName>Currency</fullName>
+        <fullName>ANYTYPE</fullName>
         <default>false</default>
-        <label>Currency</label>
+        <label>ANYTYPE</label>
     </customValue>
     <customValue>
-        <fullName>Date</fullName>
+        <fullName>BASE64</fullName>
         <default>false</default>
-        <label>Date</label>
+        <label>BASE64</label>
     </customValue>
     <customValue>
-        <fullName>DateTime</fullName>
+        <fullName>BOOLEAN</fullName>
         <default>false</default>
-        <label>DateTime</label>
+        <label>BOOLEAN</label>
     </customValue>
     <customValue>
-        <fullName>Email</fullName>
+        <fullName>COMBOBOX</fullName>
         <default>false</default>
-        <label>Email</label>
+        <label>COMBOBOX</label>
     </customValue>
     <customValue>
-        <fullName>Encrypted Text</fullName>
+        <fullName>CURRENCY</fullName>
         <default>false</default>
-        <label>Encrypted Text</label>
+        <label>CURRENCY</label>
     </customValue>
     <customValue>
-        <fullName>Geolocation</fullName>
+        <fullName>DATACATEGORYGROUPREFERENCE</fullName>
         <default>false</default>
-        <label>Geolocation</label>
+        <label>DATACATEGORYGROUPREFERENCE</label>
     </customValue>
     <customValue>
-        <fullName>Multi-Select Picklist</fullName>
+        <fullName>DATE</fullName>
         <default>false</default>
-        <label>Multi-Select Picklist</label>
+        <label>DATE</label>
     </customValue>
     <customValue>
-        <fullName>Number</fullName>
+        <fullName>DATETIME</fullName>
         <default>false</default>
-        <label>Number</label>
+        <label>DATETIME</label>
     </customValue>
     <customValue>
-        <fullName>Percent</fullName>
+        <fullName>DOUBLE</fullName>
         <default>false</default>
-        <label>Percent</label>
+        <label>DOUBLE</label>
     </customValue>
     <customValue>
-        <fullName>Phone</fullName>
+        <fullName>EMAIL</fullName>
         <default>false</default>
-        <label>Phone</label>
+        <label>EMAIL</label>
     </customValue>
     <customValue>
-        <fullName>Picklist</fullName>
+        <fullName>ENCRYPTEDSTRING</fullName>
         <default>false</default>
-        <label>Picklist</label>
+        <label>ENCRYPTEDSTRING</label>
     </customValue>
     <customValue>
-        <fullName>Reference</fullName>
+        <fullName>ID</fullName>
         <default>false</default>
-        <label>Reference</label>
+        <label>ID</label>
     </customValue>
     <customValue>
-        <fullName>Text</fullName>
+        <fullName>INTEGER</fullName>
         <default>false</default>
-        <label>Text</label>
+        <label>INTEGER</label>
     </customValue>
     <customValue>
-        <fullName>Text Area</fullName>
+        <fullName>LOCATION</fullName>
         <default>false</default>
-        <label>Text Area</label>
+        <label>LOCATION</label>
+    </customValue>
+    <customValue>
+        <fullName>LONG</fullName>
+        <default>false</default>
+        <label>LONG</label>
+    </customValue>
+    <customValue>
+        <fullName>MULTIPICKLIST</fullName>
+        <default>false</default>
+        <label>MULTIPICKLIST</label>
+    </customValue>
+    <customValue>
+        <fullName>PERCENT</fullName>
+        <default>false</default>
+        <label>PERCENT</label>
+    </customValue>
+    <customValue>
+        <fullName>PHONE</fullName>
+        <default>false</default>
+        <label>PHONE</label>
+    </customValue>
+    <customValue>
+        <fullName>PICKLIST</fullName>
+        <default>false</default>
+        <label>PICKLIST</label>
+    </customValue>
+    <customValue>
+        <fullName>REFERENCE</fullName>
+        <default>false</default>
+        <label>REFERENCE</label>
+    </customValue>
+    <customValue>
+        <fullName>STRING</fullName>
+        <default>false</default>
+        <label>STRING</label>
+    </customValue>
+    <customValue>
+        <fullName>TEXTAREA</fullName>
+        <default>false</default>
+        <label>TEXTAREA</label>
+    </customValue>
+    <customValue>
+        <fullName>TIME</fullName>
+        <default>false</default>
+        <label>TIME</label>
     </customValue>
     <customValue>
         <fullName>URL</fullName>
