@@ -28,6 +28,16 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Proper_Object_Mapping__c.Master_Reference_Field_Name__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Proper_Object_Mapping__c.Referred_Master_Field_Name__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Proper_Object_Mapping__c.Referred_Master_Object_Name__c</field>
         <readable>true</readable>
     </fieldPermissions>
