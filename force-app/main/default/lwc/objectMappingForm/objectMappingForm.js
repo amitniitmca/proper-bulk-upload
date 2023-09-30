@@ -214,6 +214,8 @@ export default class ObjectMappingForm extends LightningElement {
                     field.objectName = this.objectValue;
                     if(this.isMasterObject == false){
                         field.masterObject = this.masterObjectValue;
+                        field.masterObjectReference = this.getMasterReference(this.masterObjectValue);
+                        console.log('1 ==> '+field.masterObjectReference);
                     }
                     else{
                         field.masterObject = null;
@@ -242,12 +244,31 @@ export default class ObjectMappingForm extends LightningElement {
                 field.sourceField = undefined;
                 field.objectName = undefined;
                 field.masterObject = undefined;
+                field.masterObjectReference = undefined;
                 field.fieldType = undefined;
                 field.referredMasterObjectName = undefined;
                 field.referredMasterFieldName = undefined;
                 break;
             }
         }
+    }
+
+    /**
+    * @description This method is used to get information of the field API name for the master object.
+    * @author Amit Kumar (Proper Salesforce Tutorials) | 29-09-2023 
+    **/
+    getMasterReference(masterObjectName){
+        let fieldAPI = '';
+        for(let field of this.fieldDetails){
+            console.log('0 ==> '+field.masterObjectName);
+            if(field.masterObjectName == masterObjectName){
+                console.log('2 ==> '+field.referredMasterObjectName);
+                fieldAPI = field.fieldName;
+                console.log('3 ==> '+field.fieldName);
+                break;
+            }
+        }
+        return fieldAPI;
     }
 
     /**
