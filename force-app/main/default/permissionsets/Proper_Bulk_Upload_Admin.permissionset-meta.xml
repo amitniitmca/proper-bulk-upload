@@ -43,6 +43,10 @@
         <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
     <tabSettings>
+        <tab>Data_Upload</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
         <tab>Object_Mapping</tab>
         <visibility>Visible</visibility>
     </tabSettings>
