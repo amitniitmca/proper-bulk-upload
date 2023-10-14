@@ -15,6 +15,8 @@
     <navType>Standard</navType>
     <tabs>Object_Mapping</tabs>
     <tabs>Data_Upload</tabs>
+    <tabs>Proper_Batch_Operation__c</tabs>
+    <tabs>Proper_Batch_Operation_Result__c</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>Proper_Bulk_Upload_UtilityBar</utilityBar>
 </CustomApplication>
