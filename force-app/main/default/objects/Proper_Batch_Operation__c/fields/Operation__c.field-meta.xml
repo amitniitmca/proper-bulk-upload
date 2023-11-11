@@ -9,18 +9,6 @@
     <type>Picklist</type>
     <valueSet>
         <restricted>true</restricted>
-        <valueSetDefinition>
-            <sorted>false</sorted>
-            <value>
-                <fullName>Insert</fullName>
-                <default>false</default>
-                <label>Insert</label>
-            </value>
-            <value>
-                <fullName>Update</fullName>
-                <default>false</default>
-                <label>Update</label>
-            </value>
-        </valueSetDefinition>
+        <valueSetName>Operations</valueSetName>
     </valueSet>
 </CustomField>

@@ -9,23 +9,6 @@
     <type>Picklist</type>
     <valueSet>
         <restricted>true</restricted>
-        <valueSetDefinition>
-            <sorted>false</sorted>
-            <value>
-                <fullName>|</fullName>
-                <default>false</default>
-                <label>|</label>
-            </value>
-            <value>
-                <fullName>#</fullName>
-                <default>false</default>
-                <label>#</label>
-            </value>
-            <value>
-                <fullName>^</fullName>
-                <default>false</default>
-                <label>^</label>
-            </value>
-        </valueSetDefinition>
+        <valueSetName>Separators</valueSetName>
     </valueSet>
 </CustomField>
