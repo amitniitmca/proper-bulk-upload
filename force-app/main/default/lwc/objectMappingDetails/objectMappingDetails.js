@@ -20,7 +20,6 @@ export default class ObjectMappingDetails extends LightningElement {
         {label: 'Field Type', fieldName: 'Destination_Field_Type__c'},
         {label: 'Destination Object Name', fieldName: 'Destination_Object_Name__c'},
         {label: 'Master Object Name', fieldName: 'Master_Object_Name__c'},
-        {label: 'Master Reference Field', fieldName: 'Master_Reference_Field_Name__c'},
         {label: 'Referred Master Field Name', fieldName: 'Referred_Master_Field_Name__c'},
         {label: 'Referred Master Object Name', fieldName: 'Referred_Master_Object_Name__c'},
         {type: 'button', initialWidth: 55, typeAttributes: {label:'Edit', value:'Edit', variant:'base'}},
