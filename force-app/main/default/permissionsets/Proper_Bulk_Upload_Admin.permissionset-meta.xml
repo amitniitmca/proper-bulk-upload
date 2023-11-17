@@ -22,7 +22,7 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>false</editable>
+        <editable>true</editable>
         <field>Proper_Batch_Operation_Result__c.Is_Parent__c</field>
         <readable>true</readable>
     </fieldPermissions>
