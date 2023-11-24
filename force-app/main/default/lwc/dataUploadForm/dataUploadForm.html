@@ -1,0 +1,76 @@
+<!--
+  @description       : 
+  @author            : Amit Kumar (Proper Salesforce Tutorials)
+  @last modified on  : 11-11-2023
+  @last modified by  : Amit Kumar (Proper Salesforce Tutorials)
+-->
+<template>
+    <div class="slds-box slds-box_small uploadingFormDiv">
+        <lightning-card title="Data Upload Form">
+            <lightning-layout multiple-rows class="slds-var-p-left_large">
+                <lightning-layout-item size="2" class="slds-var-p-left_small slds-var-p-right_small">
+                    <lightning-input 
+                        type="file" 
+                        variant="standard"
+                        label="Attach file for Data Upload"
+                        accept=".csv"
+                        onchange={handleCSVUpload}
+                        disabled={records}>
+                    </lightning-input>
+                    <template if:true={fileName}>
+                        <label>{fileName}</label>
+                    </template>
+                </lightning-layout-item>
+                <lightning-layout-item size="2" class="slds-var-p-left_small slds-var-p-right_small">
+                    <lightning-input 
+                        type="text"
+                        label="Master Object Name"
+                        value={masterObjectName}
+                        onchange={handleMasterObjectNameChange}>
+                    </lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="3" class="slds-var-p-left_small slds-var-p-right_small">
+                    <lightning-combobox
+                        label="Choose Operation"
+                        value={operationValue}
+                        options={operationOptions}
+                        onchange={handleOperationChange}>
+                    </lightning-combobox>
+                </lightning-layout-item>
+                <template if:true={isUpdateOperation}>
+                    <lightning-layout-item size="2" class="slds-var-p-left_small slds-var-p-right_small">
+                        <lightning-input 
+                            type="text"
+                            label="Key Field Name"
+                            value={keyFieldName}
+                            onchange={handleKeyFieldChange}>
+                        </lightning-input>
+                    </lightning-layout-item>
+                </template>
+                <lightning-layout-item size="3" class="slds-var-p-left_small slds-var-p-right_small">
+                    <lightning-combobox
+                        label="Choose Separator"
+                        value={separatorValue}
+                        options={separatorOptions}
+                        onchange={handleSeparatorChange}>
+                    </lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" class="slds-align_absolute-center">
+                    <lightning-button 
+                        variant="brand" 
+                        label="Upload" 
+                        onclick={handleUploadClick} 
+                        class="slds-var-p-right_medium slds-var-p-top_medium"
+                        disabled={isAvailableToUpload}>
+                    </lightning-button>
+                    <lightning-button 
+                        variant="neutral" 
+                        label="Cancel" 
+                        onclick={handleCancelClick} 
+                        class="slds-var-p-left_medium slds-var-p-top_medium">
+                    </lightning-button>
+                </lightning-layout-item>
+            </lightning-layout>
+        </lightning-card>
+    </div>
+</template>

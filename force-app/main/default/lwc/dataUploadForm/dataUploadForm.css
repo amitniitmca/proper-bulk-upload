@@ -1,0 +1,6 @@
+.uploadingFormDiv{
+    display : block;
+    margin:10px;
+    border-radius: 5px !important;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.50) !important;
+}
