@@ -4,7 +4,7 @@
  * @last modified on  : 30-09-2023
  * @last modified by  : Amit Kumar (Proper Salesforce Tutorials)
 **/
-public with sharing class ObjectFieldService {
+public inherited sharing class ObjectFieldService {
 
     /**
     * @description This method is used to get all the creatable objects in the org except for the custom objects of the package.
@@ -84,7 +84,7 @@ public with sharing class ObjectFieldService {
             System.debug('objectMap => '+objectMap);
             objectMappings.add(objectMap);
         }
-        INSERT objectMappings;
+        INSERT as USER objectMappings;
     }
 
     /**
@@ -152,138 +152,164 @@ public with sharing class ObjectFieldService {
         @AuraEnabled public String masterObjectField;
     }
 
-    public static List<Map<String,Object>> getMasterObjectFieldMapping(List<Map<String, String>> records, String masterObjectName){
+    public static List<RecordInfo> getMasterObjectFieldMapping(List<Map<String, String>> records, String masterObjectName){
         List<Proper_Object_Mapping__c> objectMappings = [SELECT Id, Destination_Field_Name__c,
                                                         Destination_Field_Type__c, Destination_Object_Name__c, 
                                                         Master_Object_Name__c, Source_Field_Name__c
                                                         FROM Proper_Object_Mapping__c
-                                                        WHERE Destination_Object_Name__c = :masterObjectName];
-        List<Map<String,Object>> masterRecords = new List<Map<String,Object>>();
+                                                        WHERE Destination_Object_Name__c = :masterObjectName
+                                                        ORDER BY CreatedDate];
+        List<RecordInfo> masterRecords = new List<RecordInfo>();
+        Integer index = 1;
         for(Map<String, String> record : records){
-            Map<String,Object> masterRecord = new Map<String,Object>();
+            List<RecordInfo> masterRecs = new List<RecordInfo>();
             for(String fieldName : record.keySet()){
                 for(Proper_Object_Mapping__c objectMap : objectMappings){
                     if(objectMap.Source_Field_Name__c == fieldName){
-                        setValue(objectMap.Destination_Field_Type__c, objectMap.Destination_Field_Name__c, record.get(fieldName), masterRecord);
+                        RecordInfo mRec = new RecordInfo();
+                        mRec.recordNo = index;
+                        mRec.recordLabel = objectMap.Source_Field_Name__c;
+                        mRec.recordType = objectMap.Destination_Field_Type__c;
+                        mRec.recordName = objectMap.Destination_Field_Name__c;
+                        mRec.objectName = masterObjectName;
+                        setValue(mRec, record.get(fieldName));
+                        masterRecs.add(mRec);
                         break;
                     }
                 }
             }
-            masterRecords.add(masterRecord);
+            masterRecords.addAll(masterRecs);
+            index++;
+        }
+        for(RecordInfo ri : masterRecords){
+            ri.maxRecordNo = index-1;
         }
         return masterRecords;
     }
 
-    public static Map<String, Map<String,Object>> getChildObjectsFieldMapping(List<Map<String, String>> records, String masterObjectName, String separator){
+    public static List<RecordInfo> getChildObjectsFieldMapping(List<Map<String, String>> records, String masterObjectName){
         List<Proper_Object_Mapping__c> objectMappings = [SELECT Id, Destination_Field_Name__c,
-                                                        Destination_Field_Type__c, Destination_Object_Name__c, 
+                                                        Destination_Field_Type__c, Destination_Object_Name__c, Master_Reference_Field_Name__c, 
                                                         Master_Object_Name__c, Referred_Master_Field_Name__c, 
                                                         Referred_Master_Object_Name__c, Source_Field_Name__c
                                                         FROM Proper_Object_Mapping__c
                                                         WHERE Master_Object_Name__c = :masterObjectName
                                                         ORDER BY Destination_Object_Name__c];
-        Map<String, Map<String,Object>> childRecords = new Map<String, Map<String,Object>>();
-        Map<String, List<String>> referenceValues = new Map<String, List<String>>();
+        List<RecordInfo> childRecords = new List<RecordInfo>();
+        Integer index = 1;
         for(Map<String, String> record : records){
-            Map<String,Object> childRecord = new Map<String,Object>();
-            String childObject = '';
+            List<RecordInfo> childRecs = new List<RecordInfo>();
             for(String fieldName : record.keySet()){
                 for(Proper_Object_Mapping__c objectMap : objectMappings){
                     if(objectMap.Source_Field_Name__c == fieldName){
-                        childObject = objectMap.Destination_Object_Name__c;
+                        RecordInfo cRec = new RecordInfo();
+                        cRec.recordNo = index;
+                        cRec.recordLabel = objectMap.Source_Field_Name__c;
+                        cRec.recordType = objectMap.Destination_Field_Type__c;
+                        cRec.recordName = objectMap.Destination_Field_Name__c;
+                        cRec.objectName = objectMap.Destination_Object_Name__c;
+                        cRec.recordValue =  record.get(fieldName);
+                        cRec.masterObjectName = masterObjectName;
+                        cRec.masterObjectReferenceName = objectMap.Master_Reference_Field_Name__c;
                         if(objectMap.Destination_Field_Type__c.equalsIgnoreCase('reference')){
-                            String key = childObject+'|'+objectMap.Referred_Master_Object_Name__c+'|'+objectMap.Referred_Master_Field_Name__c+'|'+objectMap.Destination_Field_Name__c;
-                            if(!referenceValues.containsKey(key)){
-                                referenceValues.put(key, new List<String>());
-                            }
-                            if(record.get(fieldName).contains(separator)){
-                                for(String value : record.get(fieldName).split(separator)){
-                                    referenceValues.get(key).add(value);
-                                }
-                            }
-                            else{
-                                referenceValues.get(key).add(record.get(fieldName));
-                            }
+                            cRec.referencedObjectName = objectMap.Referred_Master_Object_Name__c;
+                            cRec.referencedFieldName = objectMap.Referred_Master_Field_Name__c;
                         }
-                        if(record.get(fieldName).contains(separator)){
-                            for(String value : record.get(fieldName).split(separator)){
-                                setValue(objectMap.Destination_Field_Type__c, objectMap.Destination_Field_Name__c, value, childRecord);
-                            }
-                        }
-                        else{
-                            setValue(objectMap.Destination_Field_Type__c, objectMap.Destination_Field_Name__c, record.get(fieldName), childRecord);
-                        }
+                        childRecs.add(cRec);
                         break;
                     }
                 }
             }
-            childRecords.put(childObject, childRecord);
+            childRecords.addAll(childRecs);
+            index++;
         }
-        List<Map<String, String>> recordAndIds = setRecordIdForReference(referenceValues);
-        setIdInRecords(childRecords, recordAndIds);
+        for(RecordInfo ri : childRecords){
+            ri.maxRecordNo = index-1;
+        }
         return childRecords;
     }
 
-    private static List<Map<String, String>> setRecordIdForReference(Map<String, List<String>> referenceValues){
-        List<Map<String, String>> recordAndIds = new List<Map<String,String>>();
-        for(String key : referenceValues.keySet()){
-            // childObject+'|'+objectMap.Referred_Master_Object_Name__c+'|'+objectMap.Referred_Master_Field_Name__c+'|'+objectMap.Destination_Field_Name__c;
-            //  0                       1                                           2                                                       3
-            List<String> values = referenceValues.get(key);
-            String query = 'SELECT Id, '+key.split('|')[2]+' FROM '+key.split('|')[1]+' WHERE '+key.split('|')[2]+' IN :values';
-            List<SObject> records = Database.query(query);
-            Map<String, String> rid = new Map<String, String>();
-            for(SObject rec : records){
-                rid.put(key.split('|')[0]+'|'+key.split('|')[3]+'|'+String.valueOf(rec.get(key.split('|')[2])), String.valueOf(rec.get('Id')));
-            }
-            recordAndIds.add(rid);
+    public static Map<String, String> getKeyFieldAndIds(String masterObjectName, String keyFieldName){
+        Map<String, String> keyFieldAndIds = new Map<String, String>();
+        String q = 'SELECT Id, '+keyFieldName+' FROM '+masterObjectName;
+        for(SObject record : Database.query(q)){
+            keyFieldAndIds.put(String.valueOf(record.get(keyFieldName)), String.valueOf(record.get('Id')));
         }
-        return recordAndIds;
+        return keyFieldAndIds;
     }
 
-    private static void setValue(String fieldType, String fieldName, String value, Map<String,Object> record){
-        switch on fieldType.toLowerCase() {
+    public class RecordInfo{
+        public Integer recordNo;
+        public Integer maxRecordNo;
+        public String recordLabel;
+        public String recordType;
+        public String recordName;
+        public Object recordValue;
+        public String objectName;
+        public String masterObjectName;
+        public String masterObjectReferenceName;
+        public String referencedObjectName;
+        public String referencedFieldName;
+    }
+
+    public static Map<String, Map<String, String>> getValueOfReferencedFields(String masterObjectName){
+        Map<String, Map<String, String>> objectRecords = new Map<String, Map<String, String>>();
+        List<Proper_Object_Mapping__c> objectMappings = [SELECT Id, Destination_Object_Name__c,  
+                                                        Master_Object_Name__c, Referred_Master_Field_Name__c, 
+                                                        Referred_Master_Object_Name__c
+                                                        FROM Proper_Object_Mapping__c
+                                                        WHERE Master_Object_Name__c = :masterObjectName
+                                                        AND Referred_Master_Field_Name__c != null
+                                                        AND Referred_Master_Object_Name__c != null
+                                                        ORDER BY Destination_Object_Name__c];
+        for(Proper_Object_Mapping__c pm : objectMappings){
+            System.debug('objectMappings : '+pm);
+        }
+        for(Proper_Object_Mapping__c objectMap : objectMappings){
+            String q = 'SELECT Id, '+objectMap.Referred_Master_Field_Name__c+' FROM '+objectMap.Referred_Master_Object_Name__c;
+            System.debug('query : '+q);
+            Map<String, String> objRecs = new Map<String, String>();
+            if(!objectRecords.containsKey(objectMap.Referred_Master_Object_Name__c)){
+                for(SObject record : Database.query(q)){
+                    System.debug('record : '+record);
+                    objRecs.put(String.valueOf(record.get(objectMap.Referred_Master_Field_Name__c)), String.valueOf(record.get('Id')));
+                }
+                objectRecords.put(objectMap.Referred_Master_Object_Name__c, objRecs);
+            }
+        }
+        System.debug('objectRecords '+objectRecords);
+        return objectRecords;
+    }
+
+    private static void setValue(RecordInfo record, String value){
+        switch on record.recordType.toLowerCase() {
             when 'address', 'combobox', 'datacategorygroupreference', 'email', 'encryptedstring', 'id',
                 'location', 'multipicklist', 'phone', 'picklist', 'reference', 'string', 'textarea', 'url' {
-                record.put(fieldName, value);
+                record.recordValue = value;
             }
             when 'base64' {
-                record.put(fieldName, Blob.valueOf(value));    
+                record.recordValue = Blob.valueOf(value);   
             }
             when 'boolean' {
-                record.put(fieldName, Boolean.valueOf(value));
+                record.recordValue = Boolean.valueOf(value);
             }
             when 'currency', 'double', 'percent' {
-                record.put(fieldName, Decimal.valueOf(value));
+                record.recordValue = Decimal.valueOf(value);
             }
             when 'date' {
-                record.put(fieldName, Date.valueOf(value));
+                record.recordValue = Date.valueOf(value);
             }
             when 'datetime' {
-                record.put(fieldName, Datetime.valueOf(value));
+                record.recordValue = Datetime.valueOf(value);
             }
             when 'integer' {
-                record.put(fieldName, Integer.valueOf(value));
+                record.recordValue = Integer.valueOf(value);
             }
             when 'long' {
-                record.put(fieldName, Long.valueOf(value));
+                record.recordValue = Long.valueOf(value);
             }
             when 'time' {
-                record.put(fieldName, Time.newInstance(Integer.valueOf(value.split(':')[0]), Integer.valueOf(value.split(':')[1]), 0,0));
-            }
-        }
-    }
-
-    private static void setIdInRecords(Map<String, Map<String,Object>> childRecords, List<Map<String, String>> recordAndIds){
-        for(String childObjName : childRecords.keySet()){
-            Map<String,Object> record = childRecords.get(childObjName);
-            for(String key : record.keySet()){
-                for(Map<String, String> rid : recordAndIds){
-                    if(rid.containsKey(childObjName+'|'+key+'|'+record.get(key))){
-                        record.put(key, rid.get(childObjName+'|'+key+'|'+record.get(key)));
-                        break;
-                    }
-                }
+                record.recordValue = Time.newInstance(Integer.valueOf(value.split(':')[0]), Integer.valueOf(value.split(':')[1]), 0,0);
             }
         }
     }
